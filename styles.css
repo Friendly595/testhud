@@ -1,0 +1,200 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    height: 100vh;
+}
+
+.hud-container {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+    color: white;
+    align-items: flex-end;
+}
+
+.region-info-wrapper {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 10px;
+}
+
+.region-info-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.region-info {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 8px;
+    gap: 8px;
+    background: rgba(16, 18, 39, 0.37);
+    border-radius: 8px;
+    flex-grow: 0;
+	 position: relative;
+}
+.region-info::before {
+    content: '';
+    position: absolute;
+    margin-left:45px;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background-color: rgba(255, 255, 255, 0.7);
+}
+
+.region-name {
+    font-size: 14px;
+    color: white;
+    font-family: 'Ek Mukta', sans-serif;
+    font-weight: 700;
+	margin: 10px;
+}
+
+.x2-multiplier {
+    font-size: 32px;
+    font-family: 'Roboto Flex', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+}
+
+.region-icon {
+    width: 30px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-left: 6px;
+}
+
+.region-icon img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    border-radius: 4px;
+}
+
+.progress-container {
+    display: flex;
+    flex-direction: row;
+    gap: -1px;
+    margin-top: 5px;
+	background: rgba(16, 18, 39, 0.37);
+    border-radius: 8px;
+}
+.circular-progress {
+    position: relative;
+    width: 60px; 
+    height: 60px;
+    margin: 0 5px;
+}
+.weapon-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* Центрирование по горизонтали */
+    margin-top: 25px; /* Отступ от блока со звездами */
+    width: 56px; /* Фиксированная ширина контейнера */
+    text-align: center; /* Центрирование текста */
+}
+
+.weapon-icon {
+    width: 56px;
+    height: 56px;
+    background: rgba(16, 18, 39, 0.37);
+    border-radius: 10.1818px;
+    flex-shrink: 0; /* Предотвращает изменение размера квадрата */
+}
+
+.weapon-name {
+    font-family: 'Ek Mukta', sans-serif;
+    margin-top: 3px; /* Отступ сверху для текста */
+    font-size: 14px;
+    font-weight: 700;
+    color: white;
+    word-wrap: break-word; /* Перенос длинных слов */
+}
+
+.ammo {
+	font-family: 'Ek Mukta', sans-serif;
+    font-size: 14px;
+    font-weight: 700;
+	margin-top:-6px;
+}
+
+.circular-progress svg {
+    transform: rotate(-90deg);
+}
+
+.circular-progress circle {
+    fill: none;
+    stroke-width: 2;
+}
+
+.circular-progress .background {
+    stroke: rgba(255, 255, 255, 0.2); /* Цвет фона круга */
+}
+
+.circular-progress .progress {
+    stroke-dasharray: 100;
+    stroke-dashoffset: 100;
+}
+
+.circular-progress img {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 23px;
+    height: 23px;
+    object-fit: contain;
+}
+
+.stats-container {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    margin-top: 20px;
+}
+
+.currency {
+    display: flex;
+    align-items: center;
+    font-size: 30px;
+	font-family: 'Ek Mukta', sans-serif;
+    font-weight: 400;
+}
+
+.currency-symbol {
+    margin-left: 5px;
+	font-size: 24px;
+}
+
+.rating {
+    display: flex;
+    align-items: center;
+}
+
+.rating img {
+    width: 30px;
+    height: 30px;
+    margin-right: 5px;
+}
+
+/* Adaptivity */
+@media (min-width: 768px) {
+    .hud-container {
+        align-items: flex-end;
+    }
+
+    .stats-container {
+        align-items: flex-end;
+    }
+}

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game HUD</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Ek+Mukta:wght@400;500;700&family=Roboto+Flex:wght@900&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="hud-container">
+        <div class="region-info-wrapper">
+			<div class="region-info-container"> <!-- Новый контейнер -->
+				<div class="region-info">
+					<div class="region-icon">
+						<img src="img/R.png" alt="Region Icon">
+					</div>
+					<div class="region-name">Московская область</div>
+				</div>
+				<div class="x2-multiplier">X2</div>
+			</div>
+			<!-- Прогрессбары -->
+			<div class="progress-container">
+				<!-- Прогрессбар 1 -->
+				<div class="circular-progress" data-progress="0">
+					<svg width="60" height="60">
+						<circle class="background" cx="30" cy="30" r="22"></circle>
+						<circle class="progress" cx="30" cy="30" r="22" stroke="#FCCB1C"></circle>
+					</svg>
+					<img src="img/food.png" alt="Icon 1">
+				</div>
+				
+				<!-- Прогрессбар 2 -->
+				<div class="circular-progress" data-progress="100">
+					<svg width="60" height="60">
+						<circle class="background" cx="30" cy="30" r="22"></circle>
+						<circle class="progress" cx="30" cy="30" r="22" stroke="#FE3E3E"></circle>
+					</svg>
+					<img src="img/health.png" alt="Icon 2">
+				</div>
+				
+				<!-- Прогрессбар 3 -->
+				<div class="circular-progress" data-progress="50">
+					<svg width="60" height="60">
+						<circle class="background" cx="30" cy="30" r="22"></circle>
+						<circle class="progress" cx="30" cy="30" r="22" stroke="#3BBFE9"></circle>
+					</svg>
+					<img src="img/armor.png" alt="Icon 3">
+				</div>
+			</div>
+		</div>
+        <div class="stats-container">
+            <div class="currency" id="money">
+                <span>0</span>
+                <span class="currency-symbol">₽</span>
+            </div>
+            <div class="rating">
+                <img src="img/star.png" alt="star">
+                <img src="img/star.png" alt="star">
+                <img src="img/star.png" alt="star">
+                <img src="img/star.png" alt="star">
+                <img src="img/star.png" alt="star">
+				<img src="img/star.png" alt="star">
+				<img src="img/star.png" alt="star">
+            </div>
+			<div class="weapon-container">
+				<div class="weapon-icon"></div>
+				<div class="weapon-name" id="gun-name">AK-47</div>
+				<div class="ammo" id="ammo">23/120</div>
+			</div>
+        </div>
+    </div>
+	<script>
+		cef.emit("game:hud:setComponentVisible", "interface", false);
+		cef.emit("game:hud:setComponentVisible", "radar", true);
+
+		cef.emit("game:data:pollPlayerStats", true, 50);
+		
+		const weaponsMap = {0:"", 1:"Кастет", 2:"Клюшка для гольфа", 3:"Ментовская дубинка", 4:"Нож", 5:"Бейсбольная бита", 6:"Лопата", 7:"Бильярдный кий", 8:"Катана", 9:"Бензопила", 10:"Большой синий фалоиммитатор", 11:"Маленький светло-зелёный фалоиммитатор", 12:"Большой серый фалоиммитатор", 13:"Маленький деревянный фалоиммитатор", 14:"Букет цветов", 15:"Трость", 16:"Обыкновенная граната", 17:"Газовая граната", 18:"Граната 'Коктейль Молотова'", 39:"Граната на пульте управления", 22:"Кольт45", 23:"Пистолет с глушителем", 24:"Пустынный орёл", 25:"Однозарядный дробовик", 27:"S.P.A.Z.12", 26:"Обрезы", 28:"Узи", 32:"Tec9", 29:"Автомат MP5", 30:"Автомат Калашникова", 31:"Авт. винтовка M4", 33:"Винтовка", 34:"Винтовка со снайперским прицелом", 35:"Базука", 36:"Базука с самонаводкой", 37:"Огнемёт", 38:"Миниган", 41:"Балончик с краской", 42:"Огнетушитель", 43:"Фотоаппарат", 44:"Ночное видение", 45:"Тепловое видение"};
+
+		cef.on("game:data:playerStats", (hp, max_hp, arm, breath, wanted, weapon, ammo, max_ammo, money, speed) => {
+			document.getElementById("money").innerHTML = `${money} ₽`;
+			
+			// Рассчитываем проценты прогресса для здоровья и брони
+			let hpPercent = (hp / 100) * 100;
+			let armorPercent = arm;
+
+			const hpProgressBar = document.querySelectorAll('.circular-progress')[1]; // Второй прогрессбар
+			const armorProgressBar = document.querySelectorAll('.circular-progress')[2]; // Третий прогрессбар
+
+			hpProgressBar.setAttribute('data-progress', hpPercent);
+			armorProgressBar.setAttribute('data-progress', armorPercent);
+
+			updateProgress(hpProgressBar, hpPercent);
+			updateProgress(armorProgressBar, armorPercent);
+			
+			const gunNameElement = document.getElementById("gun-name");
+			gunNameElement.innerHTML = weaponsMap[weapon] || "";
+			
+			if(weapon == 0)	document.getElementById("ammo").innerHTML = "";
+			else document.getElementById("ammo").innerHTML = ammo + "/" + max_ammo;
+			
+			// Обновление звезд розыска
+			const stars = document.querySelectorAll(".rating img");
+			stars.forEach((star, index) => {
+				if (index < wanted) {
+					star.src = "img/star2.png"; // Звезда розыска
+				} else {
+					star.src = "img/star.png"; // Обычная звезда
+				}
+			});
+		});
+
+		function updateProgress(progressBar, progress) {
+			const circle = progressBar.querySelector('.progress');
+			const radius = circle.r.baseVal.value;
+			const circumference = 2 * Math.PI * radius;
+			const offset = circumference - (progress / 100) * circumference;
+			
+			circle.style.strokeDasharray = `${circumference} ${circumference}`;
+			circle.style.strokeDashoffset = offset;
+		}
+	</script>
+	<script src="scripts.js"></script>
+</body>
+</html>
